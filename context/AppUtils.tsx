@@ -5,7 +5,7 @@ import Loader from "@/components/Loader";
 interface AppUtilsType {
     isLoggedIn: boolean;
     setIsLoggedIn: (state: boolean)=> void;
-    setAuthToken: (state: null)=> void;
+    setAuthToken: (state: string | null)=> void;
     userProfile: null;
     setUserProfile: (state: null) => void;
     setIsLoading: (state: boolean) => void;
