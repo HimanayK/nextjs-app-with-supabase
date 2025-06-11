@@ -9,6 +9,7 @@ interface UserProfile {
   gender?: string;
   phone?: string;
 }
+
 interface AppUtilsType {
     isLoggedIn: boolean;
     setIsLoggedIn: (state: boolean)=> void;

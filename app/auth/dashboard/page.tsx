@@ -90,7 +90,7 @@ export default function Dashboard() {
         localStorage.setItem("access_token", data.session?.access_token);
         setIsLoggedIn(true);
         setUserProfile({
-          name: data.session.user?.user_metadata.fullName,
+          name: data.session.user?.user_metadata.displayName,
           email: data.session.user?.user_metadata.email,
           gender: data.session.user?.user_metadata.gender,
           phone: data.session.user?.user_metadata.phone,
@@ -99,7 +99,7 @@ export default function Dashboard() {
         localStorage.setItem(
           "user_profile",
           JSON.stringify({
-            name: data.session.user?.user_metadata.fullName,
+            name: data.session.user?.user_metadata.displayName,
             email: data.session.user?.user_metadata.email,
             gender: data.session.user?.user_metadata.gender,
             phone: data.session.user?.user_metadata.phone,
@@ -156,7 +156,7 @@ export default function Dashboard() {
         .from("products")
         .update({
           ...formData,
-          banner_image: imagePath,
+          banner_image: previewImage,
         })
         .match({
           id: editId,
@@ -173,7 +173,7 @@ export default function Dashboard() {
       const { error } = await supabase.from("products").insert({
         ...formData,
         user_id: userId,
-        banner_image: imagePath,
+        banner_image: previewImage,
       });
 
       if (error) {
@@ -331,8 +331,8 @@ export default function Dashboard() {
                               : ""
                           }
                             alt="Sample Product"
-                            width="50"
-                            height={50}
+                            width="40"
+                            height="40"
                           />
                         ) : (
                           "--"
