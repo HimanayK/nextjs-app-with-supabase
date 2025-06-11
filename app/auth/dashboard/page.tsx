@@ -120,7 +120,7 @@ export default function Dashboard() {
   };
 
   // Form Submit
-  const onFormSubmit = async (formData: any) => {
+  const onFormSubmit = async (formData: ProductType) => {
     setIsLoading(true);
 
     let imagePath = formData.banner_image;

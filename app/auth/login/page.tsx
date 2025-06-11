@@ -10,6 +10,11 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+interface UserType {
+    email?: string,
+    password?: string
+  }
+
 const formSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("Email is required"),
     password: yup.string().required("Password required"),
@@ -41,7 +46,7 @@ export default function LoginPage() {
             toast.error("Error during OAuth sing-in");
         }
     };
- const  onSubmit = async (formdata: any) => {
+ const  onSubmit = async (formdata: UserType) => {
     const { email, password } = formdata;
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
