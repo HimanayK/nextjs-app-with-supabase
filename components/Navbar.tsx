@@ -1,12 +1,12 @@
 "use client"
 import Link from "next/link";
-import { myAppHook } from "@/context/AppUtils";
+import { useMyAppHook } from "@/context/AppUtils";
 import { supabase } from "@/lib/SupabaseClient";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { isLoggedIn, setIsLoggedIn, setAuthToken } = myAppHook(); // Using the custom hook to access the context
+  const { isLoggedIn, setIsLoggedIn, setAuthToken } = useMyAppHook(); // Using the custom hook to access the context
   const  router = useRouter();  
   const handleUserLogout = async () => {
       localStorage.removeItem("accessToken");

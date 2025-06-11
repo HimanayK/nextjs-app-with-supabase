@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/SupabaseClient";
-import { myAppHook } from "@/context/AppUtils";
+import { useMyAppHook } from "@/context/AppUtils";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -21,6 +21,8 @@ interface ProductType {
   banner_image?: string | File | null;
 }
 
+
+
 const formSchema = yup.object().shape({
   title: yup.string().required("Product title is required"),
   content: yup.string().required("Description is required"),
@@ -28,10 +30,11 @@ const formSchema = yup.object().shape({
 });
 
 export default function Dashboard() {
-  const [previewImage, setPreviewImage] = useState<null>(null);
-  const [products, setProducts] = useState<ProductType | null>(null);
-  const [userId, setUserId] = useState<null>(null);
-  const [editId, setEditId] = useState(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [editId, setEditId] = useState<number | null>(null);
+
 
   const {
     setAuthToken,
@@ -39,7 +42,7 @@ export default function Dashboard() {
     isLoggedIn,
     setUserProfile,
     setIsLoading,
-  } = myAppHook();
+  } = useMyAppHook();
   const router = useRouter();
 
   const {
@@ -51,6 +54,23 @@ export default function Dashboard() {
   } = useForm({
     resolver: yupResolver(formSchema),
   });
+
+  const fetchProductsFromTable = async (userId: string) => {
+    setIsLoading(true);
+
+    const { data } = await supabase
+      .from("products")
+      .select("*")
+      .eq("user_id", userId);
+
+      if (data) {
+        setProducts(data as ProductType[]);
+      } else {
+        setProducts([]);
+      }
+
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     const handleLoginSession = async () => {
@@ -169,29 +189,15 @@ export default function Dashboard() {
     setIsLoading(false);
   };
 
-  const fetchProductsFromTable = async (userId: string) => {
-    setIsLoading(true);
-
-    const { data } = await supabase
-      .from("products")
-      .select("*")
-      .eq("user_id", userId);
-
-    if (data) {
-      setProducts(data);
-    }
-
-    setIsLoading(false);
-  };
+  
 
   // Edit Data
   const handleEditData = (product: ProductType) => {
     // console.log(product);
     setValue("title", product.title);
-    setValue("content", product.content);
-    setValue("cost", product.cost);
-    setValue("banner_image", product.banner_image);
-    setPreviewImage(product.banner_image);
+    setValue("content", product.content ?? "");
+    setValue("cost", product.cost ?? "");
+    setPreviewImage(typeof product.banner_image === "string" ? product.banner_image : null);
     setEditId(product.id!);
   };
 
@@ -280,8 +286,9 @@ export default function Dashboard() {
                   type="file"
                   className="form-control"
                   onChange={(event) => {
-                    setValue("banner_image", event.target.files[0]);
-                    setPreviewImage(URL.createObjectURL(event.target.files[0]));
+                    if (event.target.files && event.target.files.length > 0) {
+                      setPreviewImage(URL.createObjectURL(event.target.files[0]));
+                    }
                   }}
                 />
                 <small className="text-danger"></small>
@@ -314,7 +321,15 @@ export default function Dashboard() {
                       <td>
                         {singleProduct.banner_image ? (
                           <Image
-                            src={singleProduct.banner_image}
+                          src={
+                            typeof singleProduct.banner_image === "string"
+                              ? singleProduct.banner_image
+                              : singleProduct.banner_image instanceof File
+                              ? URL.createObjectURL(
+                                  singleProduct.banner_image
+                                )
+                              : ""
+                          }
                             alt="Sample Product"
                             width="50"
                             height={50}

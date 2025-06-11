@@ -4,15 +4,15 @@ import Navbar from "@/components/Navbar";
 import { supabase } from "@/lib/SupabaseClient";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { myAppHook } from "@/context/AppUtils";
+import { useMyAppHook } from "@/context/AppUtils";
 import { useRouter } from "next/navigation";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface UserType {
-    email?: string,
-    password?: string
+    email: string,
+    password: string
   }
 
 const formSchema = yup.object().shape({
@@ -23,7 +23,7 @@ const formSchema = yup.object().shape({
 
 export default function LoginPage() {
     const router = useRouter();
-    const { isLoggedIn, setIsLoggedIn, setAuthToken } = myAppHook();
+    const { isLoggedIn, setIsLoggedIn, setAuthToken } = useMyAppHook();
 
     const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(formSchema),

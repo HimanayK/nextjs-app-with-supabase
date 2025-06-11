@@ -1,12 +1,12 @@
 "use client"
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { myAppHook } from "@/context/AppUtils";
+import { useMyAppHook } from "@/context/AppUtils";
 
 
 
 export default function ProfilePage() {
-    const { userProfile } = myAppHook();
+    const { userProfile } = useMyAppHook();
     return (
         <>
         <Navbar />

@@ -10,10 +10,10 @@ import { useRouter } from "next/navigation";
 
 interface RegisterType {
   displayName?: string,
-  email?: string,
+  email: string,
   phone?: string,
   gender?: string,
-  password?: string,
+  password: string,
   confirmPassword?: string,
 }
 
