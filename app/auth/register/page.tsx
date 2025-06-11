@@ -22,14 +22,14 @@ export default function RegisterPage() {
   const {
      register,
      handleSubmit,
-     formState: {errors, isSubmitting },
+     formState: { errors },
 } = useForm({
   resolver: yupResolver(schema),
 });
 const onsubmit = async (formdata: any) => {
   // console.log("Form submitted:", formdata);
   const {displayName, email, password, gender, phone } = formdata;
-  const {data, error} = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {

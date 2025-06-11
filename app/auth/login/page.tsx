@@ -20,7 +20,7 @@ export default function LoginPage() {
     const router = useRouter();
     const { isLoggedIn, setIsLoggedIn, setAuthToken } = myAppHook();
 
-    const { register, handleSubmit, formState: {isSubmitting, errors}} = useForm({
+    const { register, handleSubmit, formState: { errors }} = useForm({
         resolver: yupResolver(formSchema),
     });
 
@@ -31,7 +31,7 @@ export default function LoginPage() {
     }, [isLoggedIn]);
 
      const handleSocialOauth = async (provider: "google" | "github") => {
-        const {data, error} = await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
                 redirectTo: `${window.location.origin}/auth/dashboard`, // Adjust the redirect URL as needed
