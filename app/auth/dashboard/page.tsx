@@ -186,11 +186,11 @@ export default function Dashboard() {
 
   // Edit Data
   const handleEditData = (product: ProductType) => {
-    console.log(product);
+    // console.log(product);
     setValue("title", product.title);
     setValue("content", product.content);
-    setValue("cost", product.cost),
-      setValue("banner_image", product.banner_image);
+    setValue("cost", product.cost);
+    setValue("banner_image", product.banner_image);
     setPreviewImage(product.banner_image);
     setEditId(product.id!);
   };

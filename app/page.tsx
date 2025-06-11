@@ -42,7 +42,7 @@ export default function Home() {
             <div className="card-body">
               <h5 className="card-title">Data & Storage</h5>
               <p className="card-text">
-              👩🏻‍💻 Manage your data and files effortlessly with Supabase's poweful database and storage solutions.
+              👩🏻‍💻 Manage your data and files effortlessly with Supabase poweful database and storage solutions.
               </p>
             </div>
           </div>
