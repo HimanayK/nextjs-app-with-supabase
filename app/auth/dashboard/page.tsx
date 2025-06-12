@@ -16,8 +16,8 @@ import Swal from "sweetalert2";
 interface ProductType {
   id?: number;
   title: string;
-  content?: string;
-  cost?: string;
+  content: string;
+  cost: string;
   banner_image?: string | File | null;
 }
 
@@ -51,9 +51,12 @@ export default function Dashboard() {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<ProductType>({
     resolver: yupResolver(formSchema),
   });
+
+  //fetch products
+    //user is logged in , after login we will fetch the userid , pass the userid to function that function will fetch the product from the table
 
   const fetchProductsFromTable = async (userId: string) => {
     setIsLoading(true);
@@ -287,8 +290,9 @@ export default function Dashboard() {
                   className="form-control"
                   onChange={(event) => {
                     if (event.target.files && event.target.files.length > 0) {
-                    // setValue("banner_image", event.target.files[0]);
-                      setPreviewImage(URL.createObjectURL(event.target.files[0]));
+                    
+                      setPreviewImage(URL.createObjectURL(event.target.files[0])); // Set the preview image
+                      setValue("banner_image", event.target.files[0]); // Set the file in the form state
                     }
                   }}
                 />
@@ -323,14 +327,7 @@ export default function Dashboard() {
                         {singleProduct.banner_image ? (
                           <Image
                           src={
-                            typeof singleProduct.banner_image === "string"
-                              ? singleProduct.banner_image
-                              : singleProduct.banner_image instanceof File
-                              ? URL.createObjectURL(
-                                  singleProduct.banner_image
-                                )
-                              : ""
-                          }
+                            singleProduct.banner_image as string}
                             alt="Sample Product"
                             width="40"
                             height="40"
