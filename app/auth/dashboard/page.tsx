@@ -156,7 +156,7 @@ export default function Dashboard() {
         .from("products")
         .update({
           ...formData,
-          banner_image: previewImage,
+          banner_image: imagePath,
         })
         .match({
           id: editId,
@@ -173,7 +173,7 @@ export default function Dashboard() {
       const { error } = await supabase.from("products").insert({
         ...formData,
         user_id: userId,
-        banner_image: previewImage,
+        banner_image: imagePath,
       });
 
       if (error) {
@@ -287,6 +287,7 @@ export default function Dashboard() {
                   className="form-control"
                   onChange={(event) => {
                     if (event.target.files && event.target.files.length > 0) {
+                    // setValue("banner_image", event.target.files[0]);
                       setPreviewImage(URL.createObjectURL(event.target.files[0]));
                     }
                   }}
