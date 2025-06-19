@@ -42,6 +42,7 @@ const onsubmit = async (formdata: RegisterType) => {
     email,
     password,
     options: {
+      emailRedirectTo: "https://nextjs-app-with-supabase.vercel.app/auth/confirmed",
       data: {
         displayName,
         gender,
@@ -49,6 +50,7 @@ const onsubmit = async (formdata: RegisterType) => {
       },
     },
   });
+  
   if (error) {
     toast.error("Failed to register the user")
   } else {
