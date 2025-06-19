@@ -4,15 +4,18 @@ import Loader from "@/components/Loader";
 
 
 interface UserProfile {
+  id?: string;  //newly added
   name?: string;
   email?: string;
   gender?: string;
   phone?: string;
+  profile_picture: string | File | null;
 }
 
 interface AppUtilsType {
     isLoggedIn: boolean;
     setIsLoggedIn: (state: boolean)=> void;
+    authToken: string | null;
     setAuthToken: (state: string | null)=> void;
     userProfile: UserProfile | null;
     setUserProfile: (state: UserProfile | null) => void;
@@ -28,7 +31,7 @@ export const AppUtilsProvider = ({
   Children: React.ReactNode;
 }) => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); 
-    const [, setAuthToken] = useState<null | string>(null);
+    const [authToken , setAuthToken] = useState<null | string>(null);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +48,8 @@ export const AppUtilsProvider = ({
   return (
    <AppUtilsContext.Provider 
    value={{ 
-    isLoggedIn, 
+    isLoggedIn,
+    authToken,
    setAuthToken, 
    setIsLoggedIn, 
    userProfile, 

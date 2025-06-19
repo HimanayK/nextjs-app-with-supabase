@@ -43,6 +43,7 @@ export default function Dashboard() {
     setUserProfile,
     setIsLoading,
   } = useMyAppHook();
+  
   const router = useRouter();
 
   const {
@@ -55,8 +56,8 @@ export default function Dashboard() {
     resolver: yupResolver(formSchema),
   });
 
-  //fetch products
-    //user is logged in , after login we will fetch the userid , pass the userid to function that function will fetch the product from the table
+  //Fetch Products
+  //user is logged in , after login we will fetch the userid , pass the userid to function that function will fetch the product from the table
 
   const fetchProductsFromTable = async (userId: string) => {
     setIsLoading(true);
@@ -87,25 +88,28 @@ export default function Dashboard() {
 
       setIsLoading(true);
       if (data.session?.access_token) {
-        // console.log(data);
         setAuthToken(data.session?.access_token);
         setUserId(data.session?.user.id);
         localStorage.setItem("access_token", data.session?.access_token);
         setIsLoggedIn(true);
         setUserProfile({
-          name: data.session.user?.user_metadata.displayName,
+          name: data.session.user?.user_metadata.displayName || data.session.user?.user_metadata.name,
           email: data.session.user?.user_metadata.email,
           gender: data.session.user?.user_metadata.gender,
           phone: data.session.user?.user_metadata.phone,
+          profile_picture: data.session.user?.user_metadata.profile_picture,
         });
+
         //toast.success("User logged in successfully");
+
         localStorage.setItem(
           "user_profile",
           JSON.stringify({
-            name: data.session.user?.user_metadata.displayName,
+            name: data.session.user?.user_metadata.displayName || data.session.user?.user_metadata.name,
             email: data.session.user?.user_metadata.email,
             gender: data.session.user?.user_metadata.gender,
             phone: data.session.user?.user_metadata.phone,
+            profile_picture: data.session.user?.user_metadata.profile_picture,
           })
         );
 
@@ -172,6 +176,7 @@ export default function Dashboard() {
         toast.success("Product has been updated successfully");
       }
     } else {
+
       // Add Operation
       const { error } = await supabase.from("products").insert({
         ...formData,
@@ -241,6 +246,7 @@ export default function Dashboard() {
 
       <div className="container mt-5">
         <div className="row">
+
           <div className="col-md-5">
             <h3>{editId ? "Edit Product" : "Add Product"}</h3>
             <form onSubmit={handleSubmit(onFormSubmit)}>
@@ -285,6 +291,7 @@ export default function Dashboard() {
                     ""
                   )}
                 </div>
+
                 <input
                   type="file"
                   className="form-control"
@@ -298,12 +305,14 @@ export default function Dashboard() {
                 />
                 <small className="text-danger"></small>
               </div>
+
               <button type="submit" className="btn btn-success w-100">
                 {editId ? "Update Product" : "Add Product"}
               </button>
             </form>
           </div>
 
+          {/*--------- Product List -------------------*/}
           <div className="col-md-7">
             <h3>Product List</h3>
             <table className="table table-bordered">

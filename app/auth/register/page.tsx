@@ -85,6 +85,7 @@ const onsubmit = async (formdata: RegisterType) => {
             <div className="col-md-6">
               <label className="form-label" >Gender</label>
               <select className="form-control" {...register("gender")}>
+                <option value="">--Please choose an option--</option>  
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
