@@ -17,8 +17,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 // Import SweetAlert2
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 
+//Router
+import { useRouter } from "next/navigation";
 
 interface EditProfileType {
   name?: string;
@@ -42,9 +44,13 @@ export default function EditProfilePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // Custom hook to use Profile of loggedin user
-  const { userProfile, setUserProfile } = useMyAppHook();
+  const { setIsLoggedIn, setAuthToken, userProfile, setUserProfile } =
+    useMyAppHook();
 
-    // Show previous profile picture on mount
+  // Router
+  const router = useRouter();
+
+  // Show previous profile picture on mount
   useEffect(() => {
     if (userProfile?.profile_picture) {
       if (typeof userProfile.profile_picture === "string") {
@@ -125,7 +131,7 @@ export default function EditProfilePage() {
       localStorage.setItem(
         "user_profile",
         JSON.stringify({
-          id: data.user?.id, 
+          id: data.user?.id,
           name: data.user?.user_metadata.displayName,
           email: data.user?.user_metadata.email,
           gender: data.user?.user_metadata.gender,
@@ -145,35 +151,39 @@ export default function EditProfilePage() {
   };
 
   // Delete userProfile ----------------------------------------------------------------
-// const handleDeleteProfile = async () => {
-//   const result = await Swal.fire({
-//     title: "Are you sure?",
-//     text: "This action will delete your profile permanently!",
-//     icon: "warning",
-//     showCancelButton: true,
-//     confirmButtonColor: "#d33",
-//     cancelButtonColor: "#3085d6",
-//     confirmButtonText: "Yes, delete it!",
-//   });
+  const handleDeleteProfile = async () => {
+    // console.log("delete customer");
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action will delete your profile permanently!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-//   if (result.isConfirmed) {
-//     try {
-//       const user_id = userProfile?.id;
-//       const response = await fetch("/api/delete-user", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ user_id }),
-//       });
-//       if (!response.ok) throw new Error("Failed to delete profile.");
-//       localStorage.removeItem("user_profile");
-//       setUserProfile(null);
-//       toast.success("Profile deleted successfully");
-//       window.location.href = "/";
-//     } catch {
-//       toast.error("Failed to delete profile.");
-//     }
-//   }
-// };
+    if (result.isConfirmed) {
+      try {
+        const id = userProfile?.id;
+        if (id) {
+          const { data } = await supabase.auth.admin.deleteUser(id);
+          if (data) {
+            console.log(data, "---deleted customer");
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("user_profile");
+            setIsLoggedIn(false);
+            setAuthToken(null);
+            router.push("/auth/login");
+            toast.success("Profile deleted successfully");
+          
+          }
+        }
+      } catch {
+        toast.error("Failed to delete profile.");
+      }
+    }
+  };
 
   return (
     <>
@@ -181,21 +191,21 @@ export default function EditProfilePage() {
       <div className="container mt-5">
         <h2 className="text-center mb-3">Edit Profile</h2>
 
-      <div style={{ maxHeight: '30rem', overflowY: 'auto' }}>
-        <form onSubmit={handleSubmit(onsubmit)} className="w-50 mx-auto mt-3">
-          <div className="mb-3">
-            <label className="form-label">Name</label>
-            <input
-              type="text"
-              className="form-control"
-              {...register("name")}
-              placeholder={userProfile?.name}
-            />
-            <p className="text-danger">{errors.name?.message}</p>
-          </div>
+        <div style={{ maxHeight: "30rem", overflowY: "auto" }}>
+          <form onSubmit={handleSubmit(onsubmit)} className="w-50 mx-auto mt-3">
+            <div className="mb-3">
+              <label className="form-label">Name</label>
+              <input
+                type="text"
+                className="form-control"
+                {...register("name")}
+                placeholder={userProfile?.name}
+              />
+              <p className="text-danger">{errors.name?.message}</p>
+            </div>
 
             {/* EMAIL INPUT */}
-          {/* <div className="mb-3">
+            {/* <div className="mb-3">
             <label className="form-label">Email</label>
             <input
               type="email"
@@ -206,73 +216,72 @@ export default function EditProfilePage() {
             <p className="text-danger">{errors.email?.message}</p>
           </div> */}
 
-          <div className="mb-3">
-            <label className="form-label">Phone</label>
-            <input
-              type="text"
-              className="form-control"
-              {...register("phone")}
-              placeholder={userProfile?.phone}
-            />
-            <p className="text-danger">{errors.phone?.message}</p>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Gender</label>
-            <select className="form-control" {...register("gender")}>
-              <option value="">--Select Gender--</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-            <p className="text-danger">{errors.gender?.message}</p>
-          </div>
-
-          <div className="mb-3">
-            <label className="form-label">Profile Picture</label>
-            <div className="mb-2">
-              {previewImage ? (
-                <Image
-                  src={previewImage}
-                  alt="Preview"
-                  id="bannerPreview"
-                  width="100"
-                  height="100"
-                />
-              ) : (
-                ""
-              )}
+            <div className="mb-3">
+              <label className="form-label">Phone</label>
+              <input
+                type="text"
+                className="form-control"
+                {...register("phone")}
+                placeholder={userProfile?.phone}
+              />
+              <p className="text-danger">{errors.phone?.message}</p>
             </div>
 
-            <input
-              type="file"
-              className="form-control"
-              onChange={(event) => {
-                if (event.target.files && event.target.files.length > 0) {
-                  setPreviewImage(URL.createObjectURL(event.target.files[0])); // Set the preview image
-                  setValue("profile_picture", event.target.files[0]); // Set the file in the form state
-                }
-              }}
-            />
-            <small className="text-danger"></small>
-          </div>
+            <div className="mb-3">
+              <label className="form-label">Gender</label>
+              <select className="form-control" {...register("gender")}>
+                <option value="">--Select Gender--</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <p className="text-danger">{errors.gender?.message}</p>
+            </div>
 
-          <div className="d-flex justify-content-end">
-            <button type="submit" className="btn btn-primary btn-sm">
-              Update
-            </button>
+            <div className="mb-3">
+              <label className="form-label">Profile Picture</label>
+              <div className="mb-2">
+                {previewImage ? (
+                  <Image
+                    src={previewImage}
+                    alt="Preview"
+                    id="bannerPreview"
+                    width="100"
+                    height="100"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
 
-            {/* <button
-              className="btn btn-danger btn-sm"
-              style={{ marginLeft: "10px" }}
-              // onClick={handleDeleteProfile}
-            >
-              Delete
-            </button> */}
-          </div>
-        </form>
+              <input
+                type="file"
+                className="form-control"
+                onChange={(event) => {
+                  if (event.target.files && event.target.files.length > 0) {
+                    setPreviewImage(URL.createObjectURL(event.target.files[0])); // Set the preview image
+                    setValue("profile_picture", event.target.files[0]); // Set the file in the form state
+                  }
+                }}
+              />
+              <small className="text-danger"></small>
+            </div>
+
+            <div className="d-flex justify-content-end">
+              <button type="submit" className="btn btn-primary btn-sm">
+                Update
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger btn-sm"
+                style={{ marginLeft: "10px" }}
+                onClick={handleDeleteProfile}
+              >
+                Delete
+              </button>
+            </div>
+          </form>
         </div>
-
       </div>
 
       <Footer />

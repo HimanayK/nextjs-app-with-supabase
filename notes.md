@@ -343,3 +343,16 @@ export default nextConfig;
 
 - Delete Operation:
 - confirmation alert before deleting(sweet alert)
+
+
+
+
+### Delete Profile
+1. Project Setting < API Key < secret key
+![alt text](image-1.png)
+1. env.local
+1. SupabaseClient.ts
+1. vercel
+ ![alt text](image.png)
+
+

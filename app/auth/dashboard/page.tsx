@@ -98,6 +98,7 @@ export default function Dashboard() {
           gender: data.session.user?.user_metadata.gender,
           phone: data.session.user?.user_metadata.phone,
           profile_picture: data.session.user?.user_metadata.profile_picture,
+          id: data.session?.user.id,
         });
 
         //toast.success("User logged in successfully");
@@ -110,6 +111,7 @@ export default function Dashboard() {
             gender: data.session.user?.user_metadata.gender,
             phone: data.session.user?.user_metadata.phone,
             profile_picture: data.session.user?.user_metadata.profile_picture,
+            id: data.session?.user.id,
           })
         );
 
