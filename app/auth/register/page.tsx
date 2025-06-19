@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { supabase } from "@/lib/SupabaseClient";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface RegisterType {
   displayName?: string,
@@ -27,7 +28,10 @@ const schema = yup.object().shape({
 });
 
 export default function RegisterPage() {
-  const router = useRouter();
+  const [showMessage, setShowMessage] = useState(false); // 👈 state to show confirmation message
+  // const router = useRouter();
+
+  // resolver
   const {
      register,
      handleSubmit,
@@ -35,6 +39,8 @@ export default function RegisterPage() {
 } = useForm({
   resolver: yupResolver(schema),
 });
+
+// Form Submit
 const onsubmit = async (formdata: RegisterType) => {
   // console.log("Form submitted:", formdata);
   const {displayName, email, password, gender, phone } = formdata;
@@ -50,21 +56,31 @@ const onsubmit = async (formdata: RegisterType) => {
       },
     },
   });
-  
+
   if (error) {
     toast.error("Failed to register the user")
   } else {
     toast.success("User registered successfully");
     //Optionally redirect to login or home page
-    router.push("/auth/login");
+    // router.push("/auth/login");
+    setShowMessage(true); // 👈 show the message after successful signup
+
   }
 };
   return (
     <>
     <Navbar />
-      <div className="container mt-5">
-        <h2 className="text-center">Register</h2>
-        <form onSubmit={handleSubmit(onsubmit)} className="w-50 mx-auto mt-3">
+        {showMessage ? (
+  <div className="text-center mt-4">
+    <h4>✅ Registration successful!</h4>
+    <p>Please check your Gmail inbox to confirm your email.</p>
+    <p>After confirmation, you can log in.</p>
+    <a href="/auth/login" className="btn btn-primary mt-3">Go to Login</a>
+  </div>
+) : (
+  <div className="container mt-5">
+    <h2 className="text-center">Register</h2>
+  <form onSubmit={handleSubmit(onsubmit)} className="w-50 mx-auto mt-3">
           <div className="row mb-3">
             <div className="col-md-6">
               <label className="form-label">Display Name</label>
@@ -114,11 +130,11 @@ const onsubmit = async (formdata: RegisterType) => {
             Register
           </button>
         </form>
-
-        <p className="text-center mt-3">
+         <p className="text-center mt-3">
           Already have an account? <a href="/auth/login">Login</a>
         </p>
-      </div>
+        </div>
+)}
       <Footer />
     </>
   );
