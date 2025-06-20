@@ -16,7 +16,7 @@ export default function Home() {
     <Navbar />
        <header className="container text-center py-5">
         <header className="mb-5"></header>
-        <h1 className="display-4 fw-bold">Welcome to SupaNext</h1>
+        <h1 className="display-4 fw-bold">👋🏻 Welcome to SupaNext</h1>
         <p className="Lead">A Next.js application with supabase integration</p>
         <button className="btn btn-primary btn-lg" onClick={handleLogin}>Get Started</button>
        </header>
@@ -50,7 +50,7 @@ export default function Home() {
             <div className="card-body">
               <h5 className="card-title">Data & Storage</h5>
               <p className="card-text">
-              👩🏻‍💻 Manage your data and files effortlessly with Supabase poweful database and storage solutions.
+              👩🏻‍💻 Manage your data and files effortlessly with Supabase powerful database and storage solutions.
               </p>
             </div>
           </div>

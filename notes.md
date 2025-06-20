@@ -356,3 +356,51 @@ export default nextConfig;
  ![alt text](image.png)
 
 
+## ------------------------------ PROJECT SUMMARY -----------------------------------------------------------------
+Project Completion Summary
+The project has been successfully completed. Below is a brief overview of the key functionalities and topics covered:
+1. Core Concepts Covered
+ 1.1 React vs Next.js: Comparison and use-case discussion
+ 1.2 Project overview and key feature walkthrough
+ 1.3 Tech stack explanation and justification
+ 1.4 Next.js installation and environment setup
+ 1.5 Packages installed and their purposes
+ 1.6 File structure breakdown
+ 1.7 Configuration setup (e.g., next.config.ts)
+2. Supabase Integration
+ 2.1 Created and connected a Supabase account
+ 2.2 Integrated Supabase URL and API key into the project
+ 2.3 Created Supabase user table and product table
+ 2.4 Added foreign key relationship between product and auth.users
+ 2.5 Utilized Supabase storage for image uploads
+3. Routing and Components
+ 3.1 Setup of authentication routes
+ 3.2 Developed reusable components: Loader, Navbar, Footer
+ 3.3 Main page implemented: Page.tsx (Home)
+ 3.4 Routing handled using useRouter from Next.js
+4. Authentication and Session Handling
+ 4.1 Implemented custom login and registration
+ 4.2 Used Supabase authentication for login
+ 4.3 Displayed user metadata in the profile
+ 4.4 Session token handling:
+ - Read via Supabase client object
+ - Stored in localStorage
+ - Used token for secure requests
+ 4.5 Implemented logout functionality
+5. Form Validation and Notifications
+ 5.1 Used yup for form validation
+ 5.2 Integrated toaster and toast for user notifications
+6. CRUD Functionality
+ 6.1 Create Operation:
+ - Product form with image preview (URL.createObjectURL)
+ - Image upload to Supabase storage
+ - Product data stored in Supabase table
+ 6.2 Edit Operation:
+ - Autofill form on edit
+ - Updated product details
+ 6.3 Delete Operation:
+ - Used SweetAlert for confirmation
+ - Deleted product record from Supabase
+7. Deployment
+ 7.1 Configured environment variables securely in Vercel
+ 7.2 Successfully deployed the project on Vercel
