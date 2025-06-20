@@ -49,6 +49,8 @@ export default function LoginPage() {
       toast.error("Error during OAuth sing-in");
     }
   };
+
+  // Submit Form
   const onSubmit = async (formdata: UserType) => {
     const { email, password } = formdata;
     const { data, error } = await supabase.auth.signInWithPassword({

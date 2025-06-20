@@ -167,6 +167,18 @@ export default function EditProfilePage() {
       try {
         const id = userProfile?.id;
         if (id) {
+        // 1. Delete all products by this user
+        const { error: productDeleteError } = await supabase
+          .from("products")
+          .delete()
+          .eq("user_id", id);
+
+        if (productDeleteError) {
+          toast.error("Failed to delete user's products.");
+          return;
+        }
+
+          //2. Delete the user
           const { data } = await supabase.auth.admin.deleteUser(id);
           if (data) {
             console.log(data, "---deleted customer");
