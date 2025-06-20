@@ -1,8 +1,16 @@
+"use client"
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
+
 
 
 export default function Home() {
+  const router = useRouter();
+
+  function handleLogin() {
+    router.push("/auth/login");
+  }
   return (
     <>
     <Navbar />
@@ -10,7 +18,7 @@ export default function Home() {
         <header className="mb-5"></header>
         <h1 className="display-4 fw-bold">Welcome to SupaNext</h1>
         <p className="Lead">A Next.js application with supabase integration</p>
-        <button className="btn btn-primary btn-lg">Get Started</button>
+        <button className="btn btn-primary btn-lg" onClick={handleLogin}>Get Started</button>
        </header>
        
        <section className="row g-4">
