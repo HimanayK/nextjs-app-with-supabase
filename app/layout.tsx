@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{minWidth: '369px'}}>
+      <body style={{minWidth: '369px', minHeight: '850px' }}>
       <AppUtilsProvider Children={children} />
       <Toaster />
         </body>
